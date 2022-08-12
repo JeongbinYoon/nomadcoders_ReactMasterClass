@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
+import { isDarkAtom } from "../atoms";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -14,7 +16,7 @@ const Container = styled.div`
 
 const Header = styled.header`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
 `;
@@ -23,7 +25,7 @@ const CoinsList = styled.ul``;
 
 const Coin = styled.li`
   background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
   margin-bottom: 20px;
   border-radius: 15px;
   a {
@@ -40,6 +42,7 @@ const Coin = styled.li`
 `;
 
 const Title = styled.h1`
+  width: 250px;
   font-size: 48px;
   font-weight: 700;
   font-style: italic;
@@ -58,6 +61,15 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 
+const ToggleThemeBtn = styled.button`
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  color: yellow;
+  cursor: pointer;
+`;
+
 interface ICoin {
   id: string;
   name: string;
@@ -69,17 +81,10 @@ interface ICoin {
 }
 
 function Coins() {
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
   const { isLoading, data } = useQuery<ICoin[]>(["allCoins"], fetchCoins);
-  // const [coins, setCoins] = useState<ICoin[]>([]);
-  // const [loading, setLoading] = useState(true);
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await fetch("https://api.coinpaprika.com/v1/coins");
-  //     const json = await response.json();
-  //     setCoins(json.slice(0, 100));
-  //     setLoading(false);
-  //   })();
-  // }, []);
+
   return (
     <Container>
       <Helmet>
@@ -87,6 +92,9 @@ function Coins() {
       </Helmet>
       <Header>
         <Title>COIN TRACKER</Title>
+        <ToggleThemeBtn onClick={toggleDarkAtom}>
+          <img src="./theme.png" alt="toggle Theme Button" />
+        </ToggleThemeBtn>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>

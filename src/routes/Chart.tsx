@@ -3,6 +3,8 @@ import { useOutletContext } from "react-router-dom";
 import { fetchCoinHistory } from "../api";
 import ApexChart from "react-apexcharts";
 import { type } from "os";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 interface IHistorical {
   time_open: number;
@@ -15,12 +17,14 @@ interface IHistorical {
   market_cap: number;
 }
 
-interface ChartProps {
+interface IChartProps {
   coinId: string;
 }
 
 function Chart() {
-  const coinId = useOutletContext() as ChartProps["coinId"];
+  const isDark = useRecoilValue(isDarkAtom);
+
+  const coinId = useOutletContext() as IChartProps["coinId"];
   const { isLoading, data } = useQuery<IHistorical[]>(
     ["ohlcv", coinId],
     () => fetchCoinHistory(coinId),
@@ -35,65 +39,6 @@ function Chart() {
     };
   });
   return (
-    // <div>
-    //   {isLoading ? (
-    //     "Chart Loading..."
-    //   ) : (
-    //     <ApexChart
-    //       type="line"
-    //       series={[
-    //         {
-    //           name: "price",
-    //           data: data?.map((price) => Number(price.close)) as number[],
-    //         },
-    //       ]}
-    //       options={{
-    //         theme: {
-    //           mode: "dark",
-    //         },
-    //         chart: {
-    //           height: 300,
-    //           width: 500,
-    //           toolbar: {
-    //             show: false,
-    //           },
-    //           background: "transparent",
-    //         },
-    //         stroke: {
-    //           curve: "smooth",
-    //           width: 4,
-    //         },
-    //         grid: {
-    //           show: false,
-    //         },
-    //         xaxis: {
-    //           labels: { show: false },
-    //           axisTicks: { show: false },
-    //           axisBorder: { show: false },
-    //           // categories: data?.map((price) => new Date(price.time_close)),
-    //           categories: data?.map((price) => price.time_close),
-    //           type: "datetime",
-    //         },
-    //         yaxis: {
-    //           show: false,
-    //         },
-    //         fill: {
-    //           type: "gradient",
-    //           gradient: {
-    //             gradientToColors: ["#0be881"],
-    //             stops: [0, 100],
-    //           },
-    //         },
-    //         colors: ["#0fbcf9"],
-    //         tooltip: {
-    //           y: {
-    //             formatter: (value) => `$${value.toFixed(2)}`,
-    //           },
-    //         },
-    //       }}
-    //     />
-    //   )}
-    // </div>
     <div>
       {isLoading ? (
         "Chart Loading..."
@@ -118,8 +63,11 @@ function Chart() {
                 enabled: false,
               },
             },
+            grid: {
+              borderColor: "#808e9b",
+            },
             theme: {
-              mode: "dark",
+              mode: isDark ? "dark" : "light",
             },
             xaxis: {
               labels: {
