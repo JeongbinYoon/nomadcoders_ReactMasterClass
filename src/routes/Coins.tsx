@@ -9,6 +9,7 @@ const Container = styled.div`
   padding: 0px 20px;
   max-width: 480px;
   margin: 0 auto;
+  padding-top: 20px;
 `;
 
 const Header = styled.header`
@@ -40,6 +41,9 @@ const Coin = styled.li`
 
 const Title = styled.h1`
   font-size: 48px;
+  font-weight: 700;
+  font-style: italic;
+  text-decoration: underline;
   color: ${(props) => props.theme.accentColor};
 `;
 
@@ -79,10 +83,10 @@ function Coins() {
   return (
     <Container>
       <Helmet>
-        <title>코인</title>
+        <title>COIN TRACKER</title>
       </Helmet>
       <Header>
-        <Title>코인</Title>
+        <Title>COIN TRACKER</Title>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>

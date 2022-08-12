@@ -17,6 +17,7 @@ const Container = styled.div`
   padding: 0px 20px;
   max-width: 480px;
   margin: 0 auto;
+  padding-top: 20px;
 `;
 
 const Header = styled.header`
@@ -24,10 +25,24 @@ const Header = styled.header`
   justify-content: center;
   align-items: center;
   margin-bottom: 30px;
+  position: relative;
+`;
+
+const BackBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #a4b0be;
+  font-size: 24px;
+  position: absolute;
+  left: 0;
+  top: 60%;
+  transform: translateY(-50%);
+  cursor: pointer;
 `;
 
 const Title = styled.h1`
   font-size: 48px;
+  font-weight: 700;
   color: ${(props) => props.theme.accentColor};
 `;
 
@@ -186,6 +201,9 @@ function Coin() {
         </title>
       </Helmet>
       <Header>
+        <Link to={"/"}>
+          <BackBtn>&lt;</BackBtn>
+        </Link>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
